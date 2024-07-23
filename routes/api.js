@@ -27,8 +27,17 @@ module.exports = function (app) {
 
   app.route('/api/books')
     .get(function (req, res){
-      //response will be array of book objects
-      //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
+      Book.find({})
+        .then(data => {
+          let library = [];
+          for (let indx in data) {
+            library.push({
+              "_id": data[indx]._id, 
+              "title": data[indx].title, 
+              "commentcount": data[indx].commentcount});
+          }
+          res.json(library);
+      });
     })
     
     .post(function (req, res){
@@ -52,6 +61,7 @@ module.exports = function (app) {
     })
     
     .delete(function(req, res){
+      
       //if successful response will be 'complete delete successful'
     });
 

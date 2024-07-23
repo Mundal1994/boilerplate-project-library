@@ -55,7 +55,6 @@ suite('Functional Tests', function() {
           book1['commentcount'] = res.body.commentcount;
           assert.equal(res.body.title, book1['title']);
           book1['_id'] = res.body._id;
-          console.log("new book: ", book1);
           done();
         });
       });
@@ -77,7 +76,18 @@ suite('Functional Tests', function() {
     suite('GET /api/books => array of books', function(){
       
       test('Test GET /api/books',  function(done){
-        //done();
+        chai
+        .request(server)
+        .keepOpen()
+        .get('/api/books')
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.isArray(res.body);
+          for (let i in res.body) {
+            assert.hasAllDeepKeys(res.body[i], ["_id", "title", "commentcount"]);
+          }
+          done();
+        });
       });      
       
     });
