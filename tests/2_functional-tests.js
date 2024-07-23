@@ -13,13 +13,16 @@ const server = require('../server');
 
 chai.use(chaiHttp);
 
-suite('Functional Tests', function() {
+let book1 = {
+  title: "Moby Dick"
+};
 
+suite('Functional Tests', function() {
   /*
   * ----[EXAMPLE TEST]----
   * Each test should completely test the response of the API end-point including response status code!
   */
-  test('#example Test GET /api/books', function(done){
+  /*test('#example Test GET /api/books', function(done){
      chai.request(server)
       .get('/api/books')
       .end(function(err, res){
@@ -30,26 +33,46 @@ suite('Functional Tests', function() {
         assert.property(res.body[0], '_id', 'Books in array should contain _id');
         done();
       });
-  });
+  });*/
   /*
   * ----[END of EXAMPLE TEST]----
   */
-
   suite('Routing tests', function() {
-
-
+    
     suite('POST /api/books with title => create book object/expect book object', function() {
-      
+    
       test('Test POST /api/books with title', function(done) {
-        //done();
+        chai
+        .request(server)
+        .keepOpen()
+        .post('/api/books')
+        .send(book1)
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.isObject(res.body);
+          assert.hasAllKeys(res.body, ["_id", "title", "commentcount", "comments", "__v"]);
+          assert.equal(res.body.commentcount, 0);
+          book1['commentcount'] = res.body.commentcount;
+          assert.equal(res.body.title, book1['title']);
+          book1['_id'] = res.body._id;
+          console.log("new book: ", book1);
+          done();
+        });
       });
       
       test('Test POST /api/books with no title given', function(done) {
-        //done();
+        chai
+        .request(server)
+        .keepOpen()
+        .post('/api/books')
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.isObject(res.body);
+          assert.equal(res.body.error, "missing required field title");
+          done();
+        });
       });
-      
     });
-
 
     suite('GET /api/books => array of books', function(){
       
@@ -98,7 +121,6 @@ suite('Functional Tests', function() {
       test('Test DELETE /api/books/[id] with  id not in db', function(done){
         //done();
       });
-
     });
 
   });
