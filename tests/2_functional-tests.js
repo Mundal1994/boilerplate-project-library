@@ -66,8 +66,8 @@ suite('Functional Tests', function() {
         .post('/api/books')
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.isObject(res.body);
-          assert.equal(res.body.error, "missing required field title");
+          assert.isString(res.body);
+          assert.equal(res.body, "missing required field title");
           done();
         });
       });
@@ -102,8 +102,8 @@ suite('Functional Tests', function() {
         .get('/api/books/' + book1['_id'] + '1234')
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.isObject(res.body);
-          assert.equal(res.body.error, 'no book exists');
+          assert.isString(res.body);
+          assert.equal(res.body, 'no book exists');
           done();
         });
       });
@@ -160,8 +160,8 @@ suite('Functional Tests', function() {
         })
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.isObject(res.body);
-          assert.equal(res.body.error, 'missing required field comment');
+          assert.isString(res.body);
+          assert.equal(res.body, 'missing required field comment');
           done();
         });
       });
@@ -176,8 +176,8 @@ suite('Functional Tests', function() {
         })
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.isObject(res.body);
-          assert.equal(res.body.error, 'no book exists');
+          assert.isString(res.body);
+          assert.equal(res.body, 'no book exists');
           done();
         });
       });
@@ -193,8 +193,8 @@ suite('Functional Tests', function() {
         .delete('/api/books/' + book1['_id'])
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.isObject(res.body);
-          assert.equal(res.body.result, 'delete successful');
+          assert.isString(res.body);
+          assert.equal(res.body, 'delete successful');
           done();
         });
       });
@@ -206,8 +206,8 @@ suite('Functional Tests', function() {
         .delete('/api/books/' + book1['_id'])
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.isObject(res.body);
-          assert.equal(res.body.error, 'no book exists to delete');
+          assert.isString(res.body);
+          assert.equal(res.body, 'no book exists to delete');
           done();
         });
       });

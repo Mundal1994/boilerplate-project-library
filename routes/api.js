@@ -22,9 +22,6 @@ module.exports = function (app) {
   
   const Book = mongoose.model('Library', bookSchema);
 
-
-//{"comments":["here is a comment"],"_id":"66a011e61437920013869532","title":"Mody Dick","commentcount":1,"__v":1}
-
   app.route('/api/books')
     .get(function (req, res){
       Book.find({})
@@ -43,8 +40,7 @@ module.exports = function (app) {
     .post(function (req, res){
       let title = req.body.title;
       if (!title) {
-        res.send({error: 'missing required field title'});
-        return;
+        return res.json('missing required field title');
       }
 
       const book = new Book({
@@ -66,7 +62,7 @@ module.exports = function (app) {
           return;
         }
 
-        res.send({result: "complete delete successful"});
+        res.json("complete delete successful");
       })
     });
 
@@ -77,16 +73,16 @@ module.exports = function (app) {
       let bookid = req.params.id;
 
       if (!bookid) {
-        return res.send({error: 'missing required field id'});
+        return res.json('missing required field id');
       }
 
       if (!mongoose.isValidObjectId(bookid)) {
-        return res.json({error: 'no book exists'});
+        return res.json('no book exists');
       }
 
       Book.findById(bookid, function(err, data) {
         if (err || !data) {
-          return res.json({error: 'no book exists'});
+          return res.json('no book exists');
         }
 
         let library = [{
@@ -103,12 +99,12 @@ module.exports = function (app) {
       let comment = req.body.comment;
 
       if (!comment) {
-        return res.send({error: 'missing required field comment'});
+        return res.json('missing required field comment');
       }
       
       Book.findByIdAndUpdate(bookid, {$push: {comments: comment}}, {new: true}, (err, elem) => {
         if (err || !elem) {
-          return res.send({error: 'no book exists'});
+          return res.json('no book exists');
         }
 
         elem.commentcount++;
@@ -120,17 +116,17 @@ module.exports = function (app) {
       let bookid = req.params.id;
 
       if (!bookid) {
-        return res.send({error: 'missing required field _id'});
+        return res.json('missing required field _id');
       }
       
       Book.findByIdAndDelete(bookid, (err, elem) => {
         if (err || !elem) {
-          return res.send({error: 'no book exists to delete'});
+          return res.json('no book exists to delete');
         }
 
         elem.commentcount++;
-        res.send({result: 'delete successful'});
+        res.json('delete successful');
       })
     });
-  
+
 };
