@@ -121,7 +121,7 @@ module.exports = function (app) {
       
       Book.findByIdAndDelete(bookid, (err, elem) => {
         if (err || !elem) {
-          return res.json('no book exists to delete');
+          return res.json('no book exists');
         }
 
         elem.commentcount++;
