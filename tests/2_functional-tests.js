@@ -187,11 +187,29 @@ suite('Functional Tests', function() {
     suite('DELETE /api/books/[id] => delete book object id', function() {
 
       test('Test DELETE /api/books/[id] with valid id in db', function(done){
-        //done();
+        chai
+        .request(server)
+        .keepOpen()
+        .delete('/api/books/' + book1['_id'])
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.isObject(res.body);
+          assert.equal(res.body.result, 'delete successful');
+          done();
+        });
       });
 
       test('Test DELETE /api/books/[id] with  id not in db', function(done){
-        //done();
+        chai
+        .request(server)
+        .keepOpen()
+        .delete('/api/books/' + book1['_id'])
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.isObject(res.body);
+          assert.equal(res.body.error, 'no book exists to delete');
+          done();
+        });
       });
     });
 

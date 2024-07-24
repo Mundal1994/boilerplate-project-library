@@ -118,7 +118,19 @@ module.exports = function (app) {
     
     .delete(function(req, res){
       let bookid = req.params.id;
-      //if successful response will be 'delete successful'
+
+      if (!bookid) {
+        return res.send({error: 'missing required field _id'});
+      }
+      
+      Book.findByIdAndDelete(bookid, (err, elem) => {
+        if (err || !elem) {
+          return res.send({error: 'no book exists to delete'});
+        }
+
+        elem.commentcount++;
+        res.send({result: 'delete successful'});
+      })
     });
   
 };
