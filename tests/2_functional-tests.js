@@ -207,7 +207,7 @@ suite('Functional Tests', function() {
         .end(function(err, res){
           assert.equal(res.status, 200);
           assert.isString(res.body);
-          assert.equal(res.body, 'no book exists to delete');
+          assert.equal(res.body, 'no book exists');
           done();
         });
       });
