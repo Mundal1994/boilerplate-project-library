@@ -57,7 +57,7 @@ module.exports = function (app) {
     })
     
     .delete(function(req, res){
-      Book.deleteMany({}, (err, res) => {
+      Book.deleteMany({}, (err, elem) => {
         if (err) {
           return;
         }
