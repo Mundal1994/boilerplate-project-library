@@ -85,11 +85,11 @@ module.exports = function (app) {
           return res.json('no book exists');
         }
 
-        let library = [{
+        let library = {
           _id: data._id, 
           title: data.title, 
           comments: data.comments
-        }];
+        };
         res.json(library);
       });
     })

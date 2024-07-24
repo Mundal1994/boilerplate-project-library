@@ -115,12 +115,11 @@ suite('Functional Tests', function() {
         .get('/api/books/' + book1['_id'])
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.isArray(res.body);
-          const elem = res.body[0];
-          assert.hasAllKeys(elem, ["_id", "title", "comments"]);
-          assert.equal(elem.title, book1['title']);
-          assert.isArray(elem.comments);
-          assert.isEmpty(elem.comments);
+          assert.isObject(res.body);
+          assert.hasAllKeys(res.body, ["_id", "title", "comments"]);
+          assert.equal(res.body.title, book1['title']);
+          assert.isArray(res.body.comments);
+          assert.isEmpty(res.body.comments);
           done();
         });
       });
