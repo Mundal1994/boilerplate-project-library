@@ -75,7 +75,27 @@ module.exports = function (app) {
   app.route('/api/books/:id')
     .get(function (req, res){
       let bookid = req.params.id;
-      //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+
+      if (!bookid) {
+        return res.send({error: 'missing required field id'});
+      }
+
+      if (!mongoose.isValidObjectId(bookid)) {
+        return res.json({error: 'no book exists'});
+      }
+
+      Book.findById(bookid, function(err, data) {
+        if (err || !data) {
+          return res.json({error: 'no book exists'});
+        }
+
+        let library = [{
+          _id: data._id, 
+          title: data.title, 
+          comments: data.comments
+        }];
+        res.json(library);
+      });
     })
     
     .post(function(req, res){

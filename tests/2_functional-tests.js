@@ -96,11 +96,33 @@ suite('Functional Tests', function() {
     suite('GET /api/books/[id] => book object with [id]', function(){
       
       test('Test GET /api/books/[id] with id not in db',  function(done){
-        //done
+        chai
+        .request(server)
+        .keepOpen()
+        .get('/api/books/' + book1['_id'] + '1234')
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.isObject(res.body);
+          assert.equal(res.body.error, 'no book exists');
+          done();
+        });
       });
       
       test('Test GET /api/books/[id] with valid id in db',  function(done){
-        //done
+        chai
+        .request(server)
+        .keepOpen()
+        .get('/api/books/' + book1['_id'])
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.isArray(res.body);
+          const elem = res.body[0];
+          assert.hasAllKeys(elem, ["_id", "title", "comments"]);
+          assert.equal(elem.title, book1['title']);
+          assert.isArray(elem.comments);
+          assert.isEmpty(elem.comments);
+          done();
+        });
       });
       
     });
