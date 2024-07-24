@@ -81,7 +81,19 @@ module.exports = function (app) {
     .post(function(req, res){
       let bookid = req.params.id;
       let comment = req.body.comment;
-      //json res format same as .get
+
+      if (!comment) {
+        return res.send({error: 'missing required field comment'});
+      }
+      
+      Book.findByIdAndUpdate(bookid, {$push: {comments: comment}}, {new: true}, (err, elem) => {
+        if (err || !elem) {
+          return res.send({error: 'no book exists'});
+        }
+
+        elem.commentcount++;
+        res.send(elem);
+      })
     })
     
     .delete(function(req, res){
